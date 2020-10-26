@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/user.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+svg path,
+svg rect{
+  fill: #FF6700;
+}
+  </style>
+
+
+<!--JQUERY-->
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+  <script>
+    MathJax.Hub.Quese={
+      tex: {
+        inlineMath: [['$$$', '$$$'], ['\\(', '\\)']],
+        displayMath: [['$','$'],["\\[","\\]"]],
+        processEscapes:true
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+<script type="text/javascript" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/javascript" src="//sta.codeforces.com/s/81719/js/prettify/prettify.js"></script>
+    <script>   
+     $(document).ready(function(){
+       $(".show").hide()
+       $(".rating").hide()
+      $('.fetch').click(function(){
+        $(".form-data").hide();
+        
+      })
+      $(".show").click(function(){
+        $(".box").hide();
+        $(".show").hide();
+        $(".rating").show();
+      })
+    })
+  </script>
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!--Side NavBar-->
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="profile">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="login">logout</a>
+</div>
+<!--Side NavBar -->
+<div id="main">
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+</div>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/problem">Problem</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+        Navbar text with an inline element
+      </span>
+    </div>
+  </nav>
+
+<h1 class="heading">Welcome To LOOKBACK</h1>
+<div class="form-data">
+<form method="POST" action="" >
+    <div class="form-group Link">
+      <input type="text" class="LinkBox" placeholder="Enter The Link" name="LinkData" required>
+      <button type="submit" class="fetch">fetch</button>
+    </div>
+ </form>
+</div>
+
+ <div class=" box">
+  <h1 class="out block"></h1>
+  <p id="ques" class="text-dark font-weigth-bold"></p>
+ </div>
+<button type="button" class="btn btn-success btn-lg float-right show">NEXT</button>
+  <div class="rating">
+    <span>Rate difficulty level</span><span  onmouseover="starmark(this)" onclick="starmark(this)" id="1one" style="font-size:40px;cursor:pointer;"  class="fa fa-star checked"></span>
+    <span onmouseover="starmark(this)" onclick="starmark(this)" id="2one"  style="font-size:40px;cursor:pointer;" class="fa fa-star "></span>
+    <span onmouseover="starmark(this)" onclick="starmark(this)" id="3one"  style="font-size:40px;cursor:pointer;" class="fa fa-star "></span>
+    <span onmouseover="starmark(this)" onclick="starmark(this)" id="4one"  style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+    <span onmouseover="starmark(this)" onclick="starmark(this)" id="5one"  style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+  <br/>
+  <textarea   class="form-control textArea" rows="3" id="comment" placeholder="Enter your review"></textarea>
+  <button   type="button"  class="btn btn-lg btn-success Submit">Submit</button>
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  var count=1
+  function starmark(item)
+  {
+  count=item.id[0];
+  sessionStorage.starRating = count;
+  var subid= item.id.substring(1);
+  for(var i=0;i<5;i++)
+  {
+  if(i<count)
+  {
+  document.getElementById((i+1)+subid).style.color="orange";
+  }
+  else
+  {
+  document.getElementById((i+1)+subid).style.color="black";
+}}}
+  
+  $(document).ready(function(){
+    $('.fetch').click(function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var LinkData = $('.LinkBox').val();
+      if(LinkData){
+        $.ajax({
+          url:'/output',
+          data: {LinkData:LinkData,page:'PostLink'},
+          method: 'POST',
+          dataType: 'JSON',
+          beforeSend:function(){
+            $('.out').html(`
+            <div class="loader loader--style1" title="0">
+              <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
+              <path opacity="0.2" fill="#000" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946
+                s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634
+                c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z"/>
+              <path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0
+                C22.32,8.481,24.301,9.057,26.013,10.047z">
+                <animateTransform attributeType="xml"
+                  attributeName="transform"
+                  type="rotate"
+                  from="0 20 20"
+                  to="360 20 20"
+                  dur="0.5s"
+                  repeatCount="indefinite"/>
+                </path>
+              </svg>
+            </div>
+            `);
+          },
+          success :function(res){
+            $(".show").show()
+            console.log(res);
+            $('.out').empty();
+            $('.out').text(res[0]);
+            for(let i=1;i<=7;i++){
+            $('#ques').append(res[i]+'<br>');}
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub  ,"ques"]);
+          }
+        })
+      }
+    })
+    $('.Submit').click(function(e){
+        var note=document.getElementById("comment").value;
+        e.preventDefault();
+        e.stopPropagation();
+        var LinkData = $('.LinkBox').val();
+          $.ajax({
+            url:'/output',
+            data: {LinkData:LinkData,rating:count,note:note,page:'Submit'},
+            method: 'POST',
+            dataType: 'JSON',
+            success:function(res){
+            console.log(res)
+            } 
+          })
+          window.location.reload();
+        })
+        $('.SelectAll').click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+          $.ajax({
+            url:'/selectAll',
+            data: {page:'selectAll'},
+            method: 'POST',
+            dataType: 'JSON',
+            success:function(res){
+            console.log(res)
+            } 
+          })
+          window.location.reload();
+        })
+
+  })
+    
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+  document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+  document.body.style.backgroundColor = "white";
+}
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<!--
+<script>
+  var count;
+  
+  function starmark(item)
+  {
+  count=item.id[0];
+  sessionStorage.starRating = count;
+  var subid= item.id.substring(1);
+  for(var i=0;i<5;i++)
+  {
+  if(i<count)
+  {
+  document.getElementById((i+1)+subid).style.color="orange";
+  }
+  else
+  {
+  document.getElementById((i+1)+subid).style.color="black";}}}
+  
+  function result()
+  {
+  //Rating : Count
+  //Review : Comment(id)
+  alert("Rating : "+count+"\nReview : "+document.getElementById("comment").value);
+  }
+  
+  </script>
+-->
+</body>
+</html> 

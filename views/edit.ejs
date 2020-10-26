@@ -1,0 +1,14 @@
+<html>
+<head>
+</head>
+<body>
+<form method="POST" action="/edit" enctype="multipart/form-data">
+    <input type="text" name="firstName" id="firstName" value=<%= user.firstName%>>
+    <input type="text" name="lastName" id="lastname" value=<%= user.lastName%>>
+    <input type="number" name="phone" id="phone" value=<%= user.phone%>>
+    <input type="email" name="email" id="email" value=<%= user.email%>>
+    <input type="file" name="image" value=<%=user.image%>>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript" src="//sta.codeforces.com/s/81719/js/prettify/prettify.js"></script>
+<link rel="stylesheet" href="/css/problem.css">
+<!--JQUERY-->
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+<script>
+
+    $(document).ready(function(){
+       no=1;
+        $.get("/filter",(result,status)=>{  
+            no=result.length;
+            if(no==0){
+                $('.Problems').hide();
+                $('.addProblems').show();
+            }
+            else{
+                $('.addProblems').hide();
+            }
+            for(let i=0;i<result.length;i++){
+                console.log(result[i]);
+                var id=result[i]._id;
+                console.log(id);
+                $('.QuesTable').append(`<tr><td>`+(i+1)+`</td>
+                                        <td><a href=/newPage?id=`+id+`>`+result[i].title.slice(2)+`</a></td>
+                                        <td>`+result[i].rating+`</td>
+                                        <td><button class="btnDelete" id=`+id+`>Delete</td>
+                                        </tr>
+                `);
+                // $('#quest').append('<a href=/newPage?id='+id+'>'+`${i+1}`+result[i].title.slice(2)+'\xa0\xa0\xa0\xa0\xa0\xa0\xa0'+result[i].rating+"<br>");
+            }
+        })
+        $('.goToUser').click(function(e){
+             var bn_pathname=window.location.href;
+             var en_pathname=bn_pathname.replace('/problem','/user');
+             window.location.replace(en_pathname);
+             console.log(en_pathname);
+        })
+        $('.QuesTable').on('click','.btnDelete',function(e){
+            $(this).closest('tr').remove();
+            e.preventDefault();
+            var id = $(this).attr('id');
+            console.log(no);
+            console.log(id);
+            $.ajax({
+                url:'/delete',
+                method:"POST",
+                data:{page:id},
+                dataType:'JSON'  
+            })
+            no-=1;
+            if(no==0){
+                $('.Problems').hide();
+                $('.addProblems').show();
+            }
+        })
+
+        $(".ascending").click(function(e){
+            e.preventDefault();
+            $.ajax({
+                url:'/filter',
+                method:"POST",
+                data:{page:'asc'},
+                dataType:'JSON',
+                success:function(result){
+                    $('.QuesTable').empty();
+                  for(let i=0;i<result.length;i++){
+                        console.log(result[i]);
+                        var id=result[i]._id;
+                        console.log(id);
+                        $('.QuesTable').append(`<tr><td>`+(i+1)+`</td>
+                                                <td><a href=/newPage?id=`+id+`>`+result[i].title.slice(2)+`</a></td>
+                                                <td>`+result[i].rating+`</td></tr>
+                        `);
+                        // $('#quest').append('<a href=/newPage?id='+id+'>'+`${i+1}`+result[i].title.slice(2)+'\xa0\xa0\xa0\xa0\xa0\xa0\xa0'+result[i].rating+"<br>");
+                    }
+                }
+            })
+        })
+        $(".descending").click(function(e){
+            e.preventDefault();
+            $.ajax({
+                url:'/filter',
+                method:"POST",
+                data:{page:'desc'},
+                dataType:'JSON',
+                success:function(result){
+                    $('.QuesTable').empty();
+                  for(let i=0;i<result.length;i++){
+                        console.log(result[i]);
+                        var id=result[i]._id;
+                        console.log(id);
+                        $('.QuesTable').append(`<tr><td>`+(i+1)+`</td>
+                                                <td><a href=/newPage?id=`+id+`>`+result[i].title.slice(2)+`</a></td>
+                                                <td>`+result[i].rating+`</td></tr>
+                        `);
+                        // $('#quest').append('<a href=/newPage?id='+id+'>'+`${i+1}`+result[i].title.slice(2)+'\xa0\xa0\xa0\xa0\xa0\xa0\xa0'+result[i].rating+"<br>");
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+</head>
+
+<body>
+    <%- include ('NavBarTemplate');  %>
+    
+<div class="jumbotron">
+    
+    <div class="Problems">
+        <div class="dropdown filter">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              filter
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item ascending" href="#" >rating ascending</a>
+              <a class="dropdown-item descending" href="#" >rating descending</a>
+            </div>
+          </div>
+      <div>
+        <table  class="table table-dark "  id="tableId">
+            <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Problem</th>
+                <th scope="col">Rating</th>
+            </tr>
+            <tbody class="QuesTable">
+            </tbody>
+        </table>
+   </div>
+</div>
+<div class="addProblems">
+    No Problems in Queue
+    <button type="button" class="goToUser">Add Problem</button>
+</div>
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+</html> 
